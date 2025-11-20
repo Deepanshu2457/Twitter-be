@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
          }
 
     },
-    post : [],
+    post : [{ type : mongoose.Types.ObjectId, ref : "post"}],
     followers : [],
     following : [],
      bio : {
