@@ -13,6 +13,6 @@ const varifiedSchema = new mongoose.Schema({
     }
 },   { timestamps:true })
 
-const verifiedMail = mongoose.model("verifiedMail", varifiedSchema)
+const VerifiedMail = mongoose.model("verifiedMail", varifiedSchema)
 
-module.exports={verifiedMail}
+module.exports={VerifiedMail}

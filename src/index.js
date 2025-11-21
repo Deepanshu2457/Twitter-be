@@ -1,7 +1,9 @@
 require("dotenv").config()
 const express=require("express")
+const {authRouter} = require("./Routes/AuthRoute")
 
 const app=express()
+app.use(express.json())
 const mongoose=require("mongoose")
 
 mongoose.connect(process.env.MONGODB_URL)
@@ -14,8 +16,13 @@ mongoose.connect(process.env.MONGODB_URL)
     
 })
 .catch((err) => {
-    console.log("db connection failed");
+    console.log(err,"db connection failed");
 });
+
+app.get("/",(req,res) => {
+    res.send("Home Page")
+})
+app.use("/api",authRouter)
 
 
 

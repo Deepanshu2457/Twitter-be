@@ -2,7 +2,7 @@ const express=require("express")
 const router=express.Router()
 const nodemailer=require("nodemailer")
 const {otpLimiter} = require("../Middleware/OtpRateLimiter")
-const {verifiedMail} = require("../Models/varifiedmail.schema")
+const {VerifiedMail} = require("../Models/varifiedmail.schema")
 const {OTP} = require("../Models/Otp.schema")
 
 const transporter = nodemailer.createTransport({
@@ -51,7 +51,7 @@ router.post("/otp/send-otp",otpLimiter,async (req,res)=>{
         if(!foundObject){
             throw new Error(" Un-macthed Email / Otp")
         }
-        await verifiedMail.create({email})
+        await VerifiedMail.create({email})
      res.status(201).json({msg : "User has Verfied"  })        
     } catch (error) {
         res.status(400).json({error : error.message})
