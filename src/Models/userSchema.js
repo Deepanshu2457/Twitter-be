@@ -62,13 +62,17 @@ const userSchema = new mongoose.Schema({
     followers : [],
     following : [],
      bio : {
+        type:String,
+        maxlength : 100,
+        trim : true 
 
      },
      profilePicture : {
+        type : String,
 
      },
 
-})
+}, {timestamps : true})
 
 
 const User = mongoose.model("user", userSchema)
