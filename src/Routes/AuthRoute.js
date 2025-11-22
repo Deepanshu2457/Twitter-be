@@ -45,8 +45,10 @@ router.post("/signin", async (req,res)=>{
         
         const foundUser = await User.findOne({username})
         if(!foundUser){
-            
+            throw new Error("user does not exist")
         }
+        const flag = await bcrypt.compare(password, foundUser.password)
+        
       
         
     } catch (error) {
