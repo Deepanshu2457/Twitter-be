@@ -39,21 +39,19 @@ router.post("/signup" ,async (req,res)=>{
 } )
 
 
-// router.post("/signin", async (req,res)=>{
-//     try {
-//         const {username,password} = req.body
+router.post("/signin", async (req,res)=>{
+    try {
+        const {username,password} = req.body
         
-//         const foundUser = await User.findOne({username})
-//         console.log(foundUser)
-//         if(!foundUser){
-//             res.json({message:"user not found"})
-//         }
-
-//         res.json(foundUser)
+        const foundUser = await User.findOne({username})
+        if(!foundUser){
+            
+        }
+      
         
-//     } catch (error) {
-//         res.json({message:error.message})
-//     }
-// })
+    } catch (error) {
+        res.json({message:error.message})
+    }
+})
 
 module.exports= {authRouter : router}
