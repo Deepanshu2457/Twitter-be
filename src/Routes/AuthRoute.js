@@ -57,12 +57,15 @@ router.post("/signin", async (req,res)=>{
         const {firstName,lastName,username : un, profilePicture, bio,followers,following,post,dateOfBirth}=foundUser
         res.cookie("LoginToken",token,{maxAge : 24 * 60 * 60 * 1000}).status(200).json({msg : "done",
          data : {firstName, lastName, username : un, profilePicture, bio, followers, following, post, dateOfBirth}})
+         } 
 
-      
-        
-    } catch (error) {
+    catch (error) {
         res.json({message:error.message})
     }
 })
+
+ router.post("/signout", (req,res)=>{
+    res.cookie("LoginToken",null).status(200).json({message:"Logout"})
+ })
 
 module.exports= {authRouter : router}
