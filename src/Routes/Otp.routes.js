@@ -1,15 +1,17 @@
+
 const express=require("express")
 const router=express.Router()
 const nodemailer=require("nodemailer")
 const {otpLimiter} = require("../Middleware/OtpRateLimiter")
 const {VerifiedMail} = require("../Models/varifiedmail.schema")
 const {OTP} = require("../Models/Otp.schema")
+const { config } = require("dotenv")
 
 const transporter = nodemailer.createTransport({
     service:"gmail",
     auth:{
         user : "sharmaindycall@gmail.com",
-        pass : process.env.PASSWORD
+        pass : process.env.EMAIL_PASSWORD
     }
 })
 
