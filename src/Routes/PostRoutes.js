@@ -5,6 +5,8 @@ const { isLoggedIn } = require("../Middleware/IsLoggedIn")
 const { isAuthor } = require("../Middleware/IsAuthor")
 const {Post} = require("../Models/postSchema")
 const {User} = require("../Models/userSchema")
+const { Reply } = require("../Models/Replies")
+const { comment } = require("../Models/commentSchema")
 
 
 
@@ -61,9 +63,46 @@ router.get("/posts",isLoggedIn, async (req,res)=>{
     }
 })
 
-router.get("/posts/:id", isLoggedIn , async(req,res)=>{
-    const foundPost = await Post.findById(req.params.id)
-    res.status(200).json({ message : " Fatch Post " , data : foundPost})
+router.get("/posts/:id", isLoggedIn , isAuthor , async(req,res)=>{
+    try {
+            const foundPost = await Post.findById(req.params.id)
+           res.status(200).json({ message : " Fatch Post " , data : foundPost})
+        
+    } catch (error) {
+        res.status(400).json({error : error.message || "please try again "})
+    }
+
+})
+
+
+router.delete("/posts/:id" , isLoggedIn, isAuthor, async(req,res)=>{
+    try {
+         const {id} = req.params
+     const foundpost = await Post.findById(id)
+     if(!foundpost){
+        throw new Error(" try Again post not found")
+
+     } 
+     for(let item of foundpost.comment){
+        const foundComment = await comment.findById(item)
+
+        for(let i of foundpost.replies){
+            await Reply.findByIdAndDelete(i)
+            
+        }
+        await comment.findByIdAndDelete(item)
+     }
+     await Post.findByIdAndDelete(id)
+         
+     res.status(200).json({message : "delete Post" , })
+        
+    } 
+    
+    catch (error) {
+        res.status(400).json({error:error.message})
+        
+    }
+    
 })
 
 

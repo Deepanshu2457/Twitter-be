@@ -12,7 +12,7 @@ const commentSchema = new mongoose.Schema({
         maxlength : 150 
     },
     likes : [{ type : mongoose.Schema.Types.ObjectId, ref : " User"}],
-    replies : []
+     replies : [{type : mongoose.Schema.Types.ObjectId, ref : "reply"}]
 })
 
 const comment = mongoose.model("comment", commentSchema)
