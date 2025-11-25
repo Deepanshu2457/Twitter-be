@@ -102,7 +102,20 @@ router.delete("/posts/:id" , isLoggedIn, isAuthor, async(req,res)=>{
         res.status(400).json({error:error.message})
         
     }
-    
+})
+
+router.patch("/posts/:id" , isLoggedIn,isAuthor,async(req,res)=>{
+    try {
+        const {id} = req.params
+        const {caption} = req.body
+        const updatePost = await Post.findByIdAndUpdate(id,{caption}, {new:true})
+        res.status(400).json({message : 'update Succesfully ' , data : updatePost})
+        
+    } catch (error) {
+        res.status(400).json({error:error.message})
+        
+    }
+ 
 })
 
 
