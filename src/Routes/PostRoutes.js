@@ -29,20 +29,43 @@ router.post("/post", isLoggedIn, async(req,res)=>{
 
 router.get("/posts",isLoggedIn, async (req,res)=>{
 
-    const loggedInUserId = req.user._id
+    try {
+         const loggedInUserId = req.user._id
 
-    const foundPost = await User.find({author : loggedInUserId}).populate(
+    const foundPosts = await User.find({author : loggedInUserId}).populate(
         [
             {
                 path : "comment",
                 populate : {
-                    path : "author"
+                    path : "author",
+                    select : "firstName lastName username profilePicture"
                 }
-            }
+            },
+         {
+            path : "likes",
+            select : "firstName lastName username profilePicture"
+         }
         ]
+
     )
 
+    res.status(200).json({
+        message : "done",
+        data : foundPosts
+    })
+        
+    }
+     catch (error) {
+        res.status(400).json({ error:error.message})
+        
+    }
 })
+
+router.get("/posts/:id", isLoggedIn , async(req,res)=>{
+    const foundPost = await Post.findById(req.params.id)
+    res.status(200).json({ message : " Fatch Post " , data : foundPost})
+})
+
 
 module.exports={
     postRouter : router
