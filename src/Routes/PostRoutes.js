@@ -118,6 +118,30 @@ router.patch("/posts/:id" , isLoggedIn,isAuthor,async(req,res)=>{
  
 })
 
+router.patch("/posts/like/:id", isLoggedIn,async(req,res)=>{
+    try {
+        const {id} = req.params
+        const userData = await User.findById(req.user._id)
+        const postToBeLiked = await Post.findById(id)
+
+        if(!postToBeLiked){
+            throw new Error("Post does not Exist / Not found")
+        }
+        const flag = postToBeLiked.likes.some((item)=>{
+             return item.toString() == req.user._id.toString()
+
+        })
+        if(!flag){
+            throw new Error("Already liked")
+        }
+        postToBeLiked.likes.push(userData._id)
+        await postToBeLiked.save()
+        res.status(200).json({message : " Done", })
+    } catch (error) {
+        res.status(400).json({error : error.message})
+    }
+})
+
 
 module.exports={
     postRouter : router
