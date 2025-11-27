@@ -142,6 +142,14 @@ router.patch("/posts/like/:id", isLoggedIn,async(req,res)=>{
     }
 })
 
+router.patch("/posts/unlike/:id", isLoggedIn ,async (req,res)=>{
+    const {id} = req.params
+    const foundPost = await Post.findById(id)
+
+    if(!foundPost){
+        throw new Error("Post does not exist / Page not Found")
+    }
+})
 
 module.exports={
     postRouter : router
