@@ -10,7 +10,7 @@ const { comment } = require("../Models/commentSchema")
 
 
 
-router.post("/post", isLoggedIn, async(req,res)=>{
+router.post("/posts", isLoggedIn, async(req,res)=>{
     try {
         const {caption , image} = req.body
         if( !image && !caption){
