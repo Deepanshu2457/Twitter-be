@@ -5,6 +5,7 @@ const {isAuthor} = require("../Middleware/IsAuthor")
 const {isLoggedIn} = require("../Middleware/IsLoggedIn")
 const {Post} = require("../Models/postSchema")
 const {Comment} = require("../Models/commentSchema")
+const { Error } = require("mongoose")
 
 router.post("comment/:id",isLoggedIn, async (req,res)=>{
     try {
@@ -48,6 +49,48 @@ router.delete("/comment/:commentId/:postId", isLoggedIn , async (req,res)=>{
         res.status(200).json({message: "done"})
     } catch (error) {
         res.status(400).json({error : error.message})
+    }
+})
+
+router.patch("/comment/like/:commentId",isLoggedIn ,async (req,res)=>{
+    try {
+        const foundComment = await Comment.findById(req.params.commentId)
+
+        if(!foundComment){
+            throw new Error("comment does not exist ")
+        }
+        if(foundComment.likes.some(item => item.toString() == req.user._id.toString())){
+                 throw new Error("Already liked")
+        }
+
+        foundComment.likes.push(req.user._id)
+        await foundComment.save()
+
+        res.status(200).json({message : "done"})
+    } catch (error) {
+        res.status(400).json({error:error.message})
+    }
+})
+
+router.patch("/comment/unlike/:comment:id", isLoggedIn , async (req,res)=>{
+    try {
+        const foundComment = await Comment.findById(req.params.commentId)
+
+        if (!foundComment){
+            throw new Error("comment does not exist")
+        }
+
+        const filteredLikes = foundComment.likes.filter((item)=>{
+            return item.toString() != req.user._id.toString()
+        })
+
+        foundComment.likes = filteredLikes
+        await foundComment.save()
+
+        res.status(200).json({messgae : "done"})
+    } catch (error) {
+        res.status(400).json({error:error.message})
+        
     }
 })
 
