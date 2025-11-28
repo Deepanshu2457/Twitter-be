@@ -15,8 +15,8 @@ const commentSchema = new mongoose.Schema({
      replies : [{type : mongoose.Schema.Types.ObjectId, ref : "reply"}]
 })
 
-const comment = mongoose.model("comment", commentSchema)
+const Comment = mongoose.model("comment", commentSchema)
 
 module.exports= {
-    comment
+    Comment
 }
