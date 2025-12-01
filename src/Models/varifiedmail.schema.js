@@ -1,4 +1,5 @@
 const mongoose=require("mongoose")
+const validator = require("validator")
 
 const varifiedSchema = new mongoose.Schema({
     mail:{

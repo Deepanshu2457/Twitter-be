@@ -72,7 +72,7 @@ router.patch("/comment/like/:commentId",isLoggedIn ,async (req,res)=>{
     }
 })
 
-router.patch("/comment/unlike/:comment:id", isLoggedIn , async (req,res)=>{
+router.patch("/comment/unlike/:commentId", isLoggedIn , async (req,res)=>{
     try {
         const foundComment = await Comment.findById(req.params.commentId)
 

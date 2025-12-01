@@ -8,7 +8,7 @@ const otpSchema= new mongoose.Schema({
         maxlength:6
 
     },
-    email:{
+    mail:{
         type:String,
         required:true,
         validate:  (val)=>{

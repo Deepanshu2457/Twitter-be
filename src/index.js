@@ -6,10 +6,12 @@ const { otpRoutes } = require("./Routes/Otp.routes")
 const { postRouter } = require("./Routes/PostRoutes")
 const { ProfileRoutes } = require("./Routes/ProfileRoutes")
 const { replyRoute } =require("./Routes/ReplyRoute")
+const cookieParser = require("cookie-parser")
 
 
 const app=express()
 app.use(express.json())
+app.use(cookieParser())
 const mongoose=require("mongoose")
 
 mongoose.connect(process.env.MONGODB_URL)

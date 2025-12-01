@@ -5,7 +5,9 @@ const nodemailer=require("nodemailer")
 const {otpLimiter} = require("../Middleware/OtpRateLimiter")
 const {VerifiedMail} = require("../Models/varifiedmail.schema")
 const {OTP} = require("../Models/Otp.schema")
-const { config } = require("dotenv")
+// const {VerifiedMail} = require("../Models/varifiedmail.schema")
+
+
 
 const transporter = nodemailer.createTransport({
     service:"gmail",
@@ -15,19 +17,27 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-router.post("/otp/send-otp",otpLimiter,async (req,res)=>{
+router.post("/otp/send-otp",otpLimiter,async(req,res) => {
     try {
         const {mail} = req.body
-        let otp = String(Math.floor(Math.random() * 1000000)).padEnd(6,"7")
-        await OTP.create({email,otp})
+        const foundMail = await VerifiedMail.findOne({mail})
+        if(foundMail)
+        {
+            throw new Error("Email already verified")
+        }
 
-        await transporter.sendMail({
-            from : '"Deepanshu" Sharmaindycall@gmail.com',
-            to : mail,
-            subject : "OTP",
-            html : `<h1>Nikita</h1>`
 
-        })
+        let otp = String(Math.floor(Math.random() * 1000000)).padEnd(6, "0")
+        await OTP.create({otp,mail})
+        console.log(otp)
+
+        // await transporter.sendMail({
+        //     from : ' "Deepanshu" sharmaindycall@gmail.com',
+        //     to : mail,
+        //     subject : "OTP",
+        //     html : `<h1>Nikita ${otp}</h1>`
+
+        // })
 
         res.status(201).json({
             message : "complete",
@@ -44,16 +54,16 @@ router.post("/otp/send-otp",otpLimiter,async (req,res)=>{
 
    router.post("/otp/verify-otp", async  (req,res)=>{
     try {
-        const {otp,email} = req.body
+        const {otp,mail} = req.body
         const foundObject = await OTP.find({
             $and : [
-                {otp} , {email}
+                {otp} , {mail}
             ]
         })
         if(!foundObject){
             throw new Error(" Un-macthed Email / Otp")
         }
-        await VerifiedMail.create({email})
+        await VerifiedMail.create({mail})
      res.status(201).json({msg : "User has Verfied"  })        
     } catch (error) {
         res.status(400).json({error : error.message})

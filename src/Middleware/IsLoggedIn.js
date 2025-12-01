@@ -3,15 +3,15 @@ const {User} = require("../Models/userSchema")
 const isLoggedIn = async (req,res,next)=>{
     try {
         const {loginToken} = req.cookies
+        // console.log(loginToken)
         const originalObject = jwt.verify(loginToken,process.env.JWT_SECRET)
 
     const foundUser = await User.findOne({_id : originalObject.id})
-
     if(!foundUser){
-        throw new Error("please log in")
+        throw new Error("please login")
     }
 
-    res.user = foundUser
+    req.user = foundUser
     next()
 
     }

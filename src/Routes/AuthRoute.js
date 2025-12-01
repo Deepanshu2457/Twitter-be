@@ -16,7 +16,7 @@ router.post("/signup" ,async (req,res)=>{
                 {mail}, {username}
             ]
         })
-        if(!foundUser){
+        if(foundUser){
             throw new Error(" Already user exist / please try changing your username and Email")
         }
 
@@ -25,7 +25,7 @@ router.post("/signup" ,async (req,res)=>{
             throw new Error("please verify your email first")
         }
 
-        const isPasswordStrong = validator.isPasswordStrong(password)
+        const isPasswordStrong = validator.isStrongPassword(password)
         if(!isPasswordStrong){
             throw new Error("Please enter a strong password")
         } 
@@ -52,12 +52,12 @@ router.post("/signin", async (req,res)=>{
             throw new Error("password incorrect")
         }
 
-        const token = await jwt.sign({id:foundUser._id}, process.env.JWT_SECRET)
+        const token = jwt.sign({id:foundUser._id}, process.env.JWT_SECRET)
+        console.log(token)
 
         const {firstName,lastName,username : un, profilePicture, bio,followers,following,post,dateOfBirth}=foundUser
-        res.cookie("LoginToken",token,{maxAge : 24 * 60 * 60 * 1000}).status(200).json({msg : "done",
-         data : {firstName, lastName, username : un, profilePicture, bio, followers, following, post, dateOfBirth}})
-         } 
+        res.cookie("loginToken",token,{maxAge : 24 * 60 * 60 * 1000}).status(200).json({msg : "Login Done",data : {firstName, lastName, username : un, profilePicture, bio, followers, following, post, dateOfBirth}})
+        } 
 
     catch (error) {
         res.json({message:error.message})

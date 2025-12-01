@@ -5,6 +5,6 @@ const otpLimiter= rateLimit({
     limit : 1
 })
 
-module.export={
+module.exports={
     otpLimiter
 }

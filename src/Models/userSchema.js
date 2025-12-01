@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
         required : true,
          trim : true,
          validate : (val)=>{
-            const isDateValid = validator.isDateValid(val)
+            const isDateValid = validator.isDate(val)
             if(!isDateValid){
                 throw new Error(" Invalid Date, use YYYY/MM/DD or YYYY-MM-DD")
             }
@@ -59,8 +59,8 @@ const userSchema = new mongoose.Schema({
 
     },
     post : [{ type : mongoose.Types.ObjectId, ref : "post"}],
-    followers : [],
-    following : [],
+    followers : [{type : mongoose.Schema.Types.ObjectId, ref : "user"}],
+    following : [{type : mongoose.Schema.Types.ObjectId, ref : "user"}],
      bio : {
         type:String,
         maxlength : 100,
